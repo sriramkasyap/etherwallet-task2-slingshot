@@ -4,23 +4,32 @@ import "./App.css";
 import CreateWallet from "./CreateWallet";
 import ImportWallet from "./ImportWallet";
 import Onboarding from "./Onboarding";
+import WalletScreen from "./WalletScreen";
 const ScreenContext = createContext();
 
 function App() {
   const [screen, setScreen] = useState("onboard");
+  const [password, setPassword] = useState();
+  const [error, setError] = useState();
+
   // onboard ->  create -> wallet
   // onboard -> import -> wallet
   // onboard -> login -> wallet
 
+  const logout = (e) => {
+    e.preventDefault();
+    setPassword("");
+    setScreen("onboard");
+  };
+
   return (
     <div className="App">
-      <ScreenContext.Provider value={{ screen, setScreen }}>
+      <ScreenContext.Provider
+        value={{ screen, setScreen, password, setPassword, error, setError }}
+      >
         <div className="header">
           {screen !== "onboard" ? (
-            <button
-              onClick={() => setScreen("onboard")}
-              className="logout-button"
-            >
+            <button onClick={logout} className="logout-button">
               Logout
             </button>
           ) : (
@@ -32,8 +41,8 @@ function App() {
           <CreateWallet />
         ) : screen === "import" ? (
           <ImportWallet />
-        ) : screen === "login" ? (
-          <ImportWallet />
+        ) : screen === "wallet" ? (
+          <WalletScreen />
         ) : (
           <Onboarding />
         )}

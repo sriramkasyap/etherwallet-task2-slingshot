@@ -1,20 +1,20 @@
-import { enc } from "crypto-js";
 import React, { useContext, useState } from "react";
 import { ScreenContext } from "./App";
 var AES = require("crypto-js/aes");
 
 const ImportWallet = () => {
-  const { setScreen } = useContext(ScreenContext);
+  const { setScreen, setPassword } = useContext(ScreenContext);
   const [pKey, setPkey] = useState(
     "1fe001cdfeed0e55af243b20d1052c0fbdfea133c12bdeb7ad57c0d68bd99273"
   );
-  const [password, setPassword] = useState();
+  const [passwordKey, setPasswordKey] = useState();
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    let encrypted = AES.encrypt(pKey, password).toString();
+    let encrypted = AES.encrypt(pKey, passwordKey).toString();
     console.log(encrypted);
     localStorage.setItem("sling_saved_pkey", encrypted);
+    setPassword(passwordKey);
     setScreen("wallet");
   };
   return (
@@ -35,13 +35,13 @@ const ImportWallet = () => {
         </div>
         <div className="input-holder">
           <input
-            type="password"
-            placeholder="Create a Password"
+            type="passwordKey"
+            placeholder="Create a PasswordKey"
             className="form-control"
-            name="password"
-            value={password}
+            name="passwordKey"
+            value={passwordKey}
             required={true}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPasswordKey(e.target.value)}
           />
         </div>
         <p className="helper-text">
