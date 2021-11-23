@@ -9,6 +9,9 @@ const Onboarding = () => {
 
       <p>What would you like to Do? </p>
 
+      <button onClick={() => setScreen("login")}>Login</button>
+      <br />
+      <br />
       <button onClick={() => setScreen("create")}>Create New Wallet</button>
       <br />
       <br />

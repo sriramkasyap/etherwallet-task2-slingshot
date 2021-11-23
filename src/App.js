@@ -10,6 +10,7 @@ function App() {
   const [screen, setScreen] = useState("onboard");
   // onboard ->  create -> wallet
   // onboard -> import -> wallet
+  // onboard -> login -> wallet
 
   return (
     <div className="App">
@@ -30,6 +31,8 @@ function App() {
         {screen === "create" ? (
           <CreateWallet />
         ) : screen === "import" ? (
+          <ImportWallet />
+        ) : screen === "login" ? (
           <ImportWallet />
         ) : (
           <Onboarding />
