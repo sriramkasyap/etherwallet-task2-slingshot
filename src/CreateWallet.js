@@ -28,7 +28,7 @@ const CreateWallet = () => {
       <form onSubmit={handleFormSubmit}>
         <div className="input-holder">
           <input
-            type="passwordKey"
+            type="password"
             placeholder="Create a Password"
             className="form-control"
             name="passwordKey"
