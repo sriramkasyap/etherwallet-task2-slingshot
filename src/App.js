@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./App.css";
 import CreateWallet from "./CreateWallet";
 import ImportWallet from "./ImportWallet";
+import LoginScreen from "./LoginScreen";
 import Onboarding from "./Onboarding";
 import WalletScreen from "./WalletScreen";
 const ScreenContext = createContext();
@@ -43,6 +44,8 @@ function App() {
           <ImportWallet />
         ) : screen === "wallet" ? (
           <WalletScreen />
+        ) : screen === "login" ? (
+          <LoginScreen />
         ) : (
           <Onboarding />
         )}

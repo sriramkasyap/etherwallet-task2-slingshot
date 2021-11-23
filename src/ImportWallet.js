@@ -35,7 +35,7 @@ const ImportWallet = () => {
         </div>
         <div className="input-holder">
           <input
-            type="passwordKey"
+            type="password"
             placeholder="Create a PasswordKey"
             className="form-control"
             name="passwordKey"

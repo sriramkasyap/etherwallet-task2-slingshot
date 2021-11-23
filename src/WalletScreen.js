@@ -7,7 +7,7 @@ var AES = require("crypto-js/aes");
 
 const WalletScreen = () => {
   const [wallet, setWallet] = useState();
-  const { password, setScreen, setPassword } = useContext(ScreenContext);
+  const { password, setScreen } = useContext(ScreenContext);
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
