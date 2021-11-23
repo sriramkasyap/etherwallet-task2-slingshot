@@ -1,14 +1,13 @@
 import { formatEther } from "@ethersproject/units";
-import { enc } from "crypto-js";
+import { AES, enc } from "crypto-js";
 import { ethers, providers } from "ethers";
 import React, { useContext, useEffect, useState } from "react";
 import { ScreenContext } from "./App";
-var AES = require("crypto-js/aes");
 
 const WalletScreen = () => {
   const [wallet, setWallet] = useState();
   const { password, setScreen } = useContext(ScreenContext);
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(null);
 
   useEffect(() => {
     if (!(password && password.length > 0)) setScreen("onboard");
@@ -47,7 +46,7 @@ const WalletScreen = () => {
           </p>
           <p>
             <strong>Your wallet Balance:</strong>
-            {formatEther(balance)} ETH
+            {balance === null ? "Loading..." : formatEther(balance) + " ETH"}
           </p>
         </>
       ) : (
