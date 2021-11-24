@@ -1,16 +1,23 @@
 import { AES, enc } from "crypto-js";
+import { ethers } from "ethers";
 import React, { useContext, useState } from "react";
+import { Fragment } from "react";
 import { ScreenContext } from "./App";
 
 const LoginScreen = () => {
-  const { setPassword, setScreen, setError, error } = useContext(ScreenContext);
+  const { setPassword, setScreen, setError, error, setCurrentWalletAddress } =
+    useContext(ScreenContext);
   const [passwordKey, setPasswordKey] = useState();
+  const [walletAddress, setWwalletAddress] = useState();
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    let encryptedPKey = localStorage.getItem("sling_saved_pkey");
-
+    let encryptedPKey = localStorage.getItem(walletAddress);
     try {
-      AES.decrypt(encryptedPKey, passwordKey).toString(enc.Utf8);
+      let pKey = AES.decrypt(encryptedPKey, passwordKey).toString(enc.Utf8);
+
+      let wallet = new ethers.Wallet(pKey);
+
+      setCurrentWalletAddress(wallet.address);
 
       setPassword(passwordKey);
 
@@ -20,6 +27,10 @@ const LoginScreen = () => {
     }
   };
 
+  let existingWallets = localStorage.getItem("ss_saved_wallets");
+
+  existingWallets = JSON.parse(existingWallets) || [];
+
   return (
     <div className="login-screen">
       <h2>Login to access your wallet</h2>
@@ -27,6 +38,21 @@ const LoginScreen = () => {
       <p style={{ color: "red" }}>{error}</p>
 
       <form onSubmit={handleFormSubmit}>
+        <div className="input-holder">
+          {existingWallets.map((ew, i) => (
+            <div key={i}>
+              <input
+                type="radio"
+                name="walletAddress"
+                value={ew}
+                checked={walletAddress === ew}
+                title={ew}
+                onChange={(e) => setWwalletAddress(e.target.value)}
+              />
+              <label>{ew}</label>
+            </div>
+          ))}
+        </div>
         <div className="input-holder">
           <input
             type="password"

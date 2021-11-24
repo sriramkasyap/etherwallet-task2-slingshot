@@ -1,23 +1,35 @@
 import { formatEther } from "@ethersproject/units";
-import { AES, enc } from "crypto-js";
+import { AES, enc, lib } from "crypto-js";
 import { ethers, providers } from "ethers";
 import React, { useContext, useEffect, useState } from "react";
 import { ScreenContext } from "./App";
 
 const WalletScreen = () => {
   const [wallet, setWallet] = useState();
-  const { password, setScreen } = useContext(ScreenContext);
+  const { password, setScreen, currentWalletAddress } =
+    useContext(ScreenContext);
   const [balance, setBalance] = useState(null);
 
   useEffect(() => {
-    if (!(password && password.length > 0)) setScreen("onboard");
-  }, [password, setScreen]);
+    if (
+      !(
+        password &&
+        password.length > 0 &&
+        currentWalletAddress &&
+        currentWalletAddress.length > 0
+      )
+    )
+      setScreen("onboard");
+  }, [password, setScreen, currentWalletAddress]);
 
   useEffect(() => {
-    let pKeyEncrypted = localStorage.getItem("sling_saved_pkey");
-    let pKey = AES.decrypt(pKeyEncrypted, password).toString(enc.Utf8);
+    let nosalt = lib.WordArray.random(0);
+    let pKeyEncrypted = localStorage.getItem(currentWalletAddress);
+    let pKey = AES.decrypt(pKeyEncrypted, password, { salt: nosalt }).toString(
+      enc.Utf8
+    );
     setWallet(new ethers.Wallet(pKey));
-  }, [setWallet, password]);
+  }, [setWallet, password, currentWalletAddress]);
 
   useEffect(() => {
     async function setwalletBalance() {

@@ -17,7 +17,15 @@ const CreateWallet = () => {
 
     let encrypted = AES.encrypt(wallet.privateKey, passwordKey).toString();
     console.log(encrypted);
-    localStorage.setItem("sling_saved_pkey", encrypted);
+
+    let existingWallets = localStorage.getItem("ss_saved_wallets");
+    existingWallets = JSON.parse(existingWallets) || [];
+    existingWallets.push(wallet.address);
+    console.log(existingWallets);
+
+    localStorage.setItem("ss_saved_wallets", JSON.stringify(existingWallets));
+
+    localStorage.setItem(wallet.address, encrypted);
     setPassword(passwordKey);
     setScreen("wallet");
   };

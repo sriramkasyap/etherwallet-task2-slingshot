@@ -11,6 +11,7 @@ const ScreenContext = createContext();
 function App() {
   const [screen, setScreen] = useState("onboard");
   const [password, setPassword] = useState();
+  const [currentWalletAddress, setCurrentWalletAddress] = useState();
   const [error, setError] = useState();
 
   // onboard ->  create -> wallet
@@ -26,7 +27,16 @@ function App() {
   return (
     <div className="App">
       <ScreenContext.Provider
-        value={{ screen, setScreen, password, setPassword, error, setError }}
+        value={{
+          screen,
+          setScreen,
+          password,
+          setPassword,
+          error,
+          setError,
+          currentWalletAddress,
+          setCurrentWalletAddress,
+        }}
       >
         <div className="header">
           {screen !== "onboard" ? (
