@@ -1,7 +1,6 @@
 import { AES, enc } from "crypto-js";
 import { ethers } from "ethers";
 import React, { useContext, useState } from "react";
-import { Fragment } from "react";
 import { ScreenContext } from "./App";
 
 const LoginScreen = () => {
@@ -11,11 +10,20 @@ const LoginScreen = () => {
   const [walletAddress, setWwalletAddress] = useState();
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!(walletAddress && walletAddress.length > 0)) {
+      setError("Please select a wallet to login");
+      return;
+    }
+
     let encryptedPKey = localStorage.getItem(walletAddress);
     try {
       let pKey = AES.decrypt(encryptedPKey, passwordKey).toString(enc.Utf8);
 
       let wallet = new ethers.Wallet(pKey);
+
+      setError("");
 
       setCurrentWalletAddress(wallet.address);
 
@@ -40,7 +48,7 @@ const LoginScreen = () => {
       <form onSubmit={handleFormSubmit}>
         <div className="input-holder">
           {existingWallets.map((ew, i) => (
-            <div key={i}>
+            <div className="radio-holder" key={i}>
               <input
                 type="radio"
                 name="walletAddress"
@@ -56,7 +64,7 @@ const LoginScreen = () => {
         <div className="input-holder">
           <input
             type="password"
-            placeholder="Create a PasswordKey"
+            placeholder="Your Wallet Password"
             className="form-control"
             name="passwordKey"
             value={passwordKey}

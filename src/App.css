@@ -9,7 +9,8 @@
   padding: 10px 0;
 }
 
-.form-control {
+.form-control,
+.radio-holder {
   line-height: 1.5;
   font-size: 16px;
   padding: 3px 15px;

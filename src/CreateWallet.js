@@ -4,7 +4,8 @@ import React, { useContext, useState } from "react";
 import { ScreenContext } from "./App";
 
 const CreateWallet = () => {
-  const { setPassword, setScreen } = useContext(ScreenContext);
+  const { setPassword, setScreen, setCurrentWalletAddress } =
+    useContext(ScreenContext);
 
   const [passwordKey, setPasswordKey] = useState();
 
@@ -21,11 +22,11 @@ const CreateWallet = () => {
     let existingWallets = localStorage.getItem("ss_saved_wallets");
     existingWallets = JSON.parse(existingWallets) || [];
     existingWallets.push(wallet.address);
-    console.log(existingWallets);
 
     localStorage.setItem("ss_saved_wallets", JSON.stringify(existingWallets));
 
     localStorage.setItem(wallet.address, encrypted);
+    setCurrentWalletAddress(wallet.address);
     setPassword(passwordKey);
     setScreen("wallet");
   };
