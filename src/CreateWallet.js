@@ -1,3 +1,6 @@
+import { Button } from "@chakra-ui/button";
+import { Input } from "@chakra-ui/input";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import { Wallet } from "@ethersproject/wallet";
 import { AES } from "crypto-js";
 import React, { useContext, useState } from "react";
@@ -31,30 +34,37 @@ const CreateWallet = () => {
     setScreen("wallet");
   };
   return (
-    <div className="create-wallet-screen">
-      <h2>Create a new Wallet</h2>
+    <Flex
+      direction="column"
+      maxW="600"
+      m="0 auto"
+      className="create-wallet-screen"
+      alignItems="center"
+    >
+      <Heading size="md" m="20px 0 40px">
+        Create a new Wallet
+      </Heading>
 
       <form onSubmit={handleFormSubmit}>
-        <div className="input-holder">
-          <input
+        <Box className="input-holder">
+          <Input
             type="password"
             placeholder="Create a Password"
-            className="form-control"
             name="passwordKey"
             value={passwordKey}
             required={true}
             onChange={(e) => setPasswordKey(e.target.value)}
           />
-        </div>
-        <p className="helper-text">
+        </Box>
+        <Text className="helper-text">
           This password will be used to encrypt your keys. Please save it in a
           safe place
-        </p>
-        <button className="submit-button" type="submit">
+        </Text>
+        <Button className="submit-button" type="submit">
           Create Wallet
-        </button>
+        </Button>
       </form>
-    </div>
+    </Flex>
   );
 };
 

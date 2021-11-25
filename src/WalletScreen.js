@@ -1,3 +1,4 @@
+import { Flex, Heading, Text } from "@chakra-ui/layout";
 import { formatEther } from "@ethersproject/units";
 import { AES, enc, lib } from "crypto-js";
 import { ethers, providers } from "ethers";
@@ -44,27 +45,29 @@ const WalletScreen = () => {
   }, [wallet]);
 
   return (
-    <div className="wallet-screen">
-      <h3>Your Saved Wallet</h3>
+    <Flex direction="column" alignItems="center" className="wallet-screen">
+      <Heading size="md" m="20px 0 40px">
+        Your Saved Wallet
+      </Heading>
 
       {wallet ? (
         <>
-          <p>
+          <Text marginBottom="2">
             <strong>Selected Network:</strong>4
-          </p>
-          <p>
+          </Text>
+          <Text marginBottom="2">
             <strong>Your Wallet Address:</strong>
             {wallet.address}
-          </p>
-          <p>
+          </Text>
+          <Text marginBottom="2">
             <strong>Your wallet Balance:</strong>
             {balance === null ? "Loading..." : formatEther(balance) + " ETH"}
-          </p>
+          </Text>
         </>
       ) : (
         <p>"Loading your wallet. Please wait..."</p>
       )}
-    </div>
+    </Flex>
   );
 };
 

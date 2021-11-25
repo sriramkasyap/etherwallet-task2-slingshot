@@ -1,3 +1,4 @@
+import { ChakraProvider, Button, Flex, Heading } from "@chakra-ui/react";
 import { createContext } from "react";
 import { useState } from "react";
 import "./App.css";
@@ -26,42 +27,44 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <ScreenContext.Provider
-        value={{
-          screen,
-          setScreen,
-          password,
-          setPassword,
-          error,
-          setError,
-          currentWalletAddress,
-          setCurrentWalletAddress,
-        }}
-      >
-        <div className="header">
-          {screen !== "onboard" ? (
-            <button onClick={logout} className="logout-button">
-              Logout
-            </button>
+    <ChakraProvider>
+      <div className="App">
+        <ScreenContext.Provider
+          value={{
+            screen,
+            setScreen,
+            password,
+            setPassword,
+            error,
+            setError,
+            currentWalletAddress,
+            setCurrentWalletAddress,
+          }}
+        >
+          <Flex justifyContent="flex-end" className="header">
+            {screen !== "onboard" ? (
+              <Button onClick={logout}>Logout</Button>
+            ) : (
+              <></>
+            )}
+          </Flex>
+          <Heading className="main-heading" style={{ textAlign: "center" }}>
+            My Wallet App
+          </Heading>
+          {screen === "create" ? (
+            <CreateWallet />
+          ) : screen === "import" ? (
+            <ImportWallet />
+          ) : screen === "wallet" ? (
+            <WalletScreen />
+          ) : screen === "login" ? (
+            <LoginScreen />
           ) : (
-            <></>
+            <Onboarding />
           )}
-        </div>
-        <h1 className="main-heading">My Wallet App</h1>
-        {screen === "create" ? (
-          <CreateWallet />
-        ) : screen === "import" ? (
-          <ImportWallet />
-        ) : screen === "wallet" ? (
-          <WalletScreen />
-        ) : screen === "login" ? (
-          <LoginScreen />
-        ) : (
-          <Onboarding />
-        )}
-      </ScreenContext.Provider>
-    </div>
+        </ScreenContext.Provider>
+      </div>
+    </ChakraProvider>
   );
 }
 
