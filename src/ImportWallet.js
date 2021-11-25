@@ -14,29 +14,34 @@ const ImportWallet = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    let wallet = new ethers.Wallet(pKey);
 
-    if (wallet && wallet.address) {
-      let encrypted = AES.encrypt(pKey, passwordKey).toString();
-      console.log(encrypted);
+    try {
+      let wallet = new ethers.Wallet(pKey);
 
-      let existingWallets = localStorage.getItem("ss_saved_wallets");
-      existingWallets = JSON.parse(existingWallets) || [];
+      if (wallet && wallet.address) {
+        let encrypted = AES.encrypt(pKey, passwordKey).toString();
+        console.log(encrypted);
 
-      if (!existingWallets.includes(wallet.address)) {
-        existingWallets.push(wallet.address);
+        let existingWallets = localStorage.getItem("ss_saved_wallets");
+        existingWallets = JSON.parse(existingWallets) || [];
 
-        localStorage.setItem(
-          "ss_saved_wallets",
-          JSON.stringify(existingWallets)
-        );
+        if (!existingWallets.includes(wallet.address)) {
+          existingWallets.push(wallet.address);
+
+          localStorage.setItem(
+            "ss_saved_wallets",
+            JSON.stringify(existingWallets)
+          );
+        }
+        localStorage.setItem(wallet.address, encrypted);
+
+        setCurrentWalletAddress(wallet.address);
+        setPassword(passwordKey);
+        setScreen("wallet");
+      } else {
       }
-      localStorage.setItem(wallet.address, encrypted);
-
-      setCurrentWalletAddress(wallet.address);
-      setPassword(passwordKey);
-      setScreen("wallet");
-    } else {
+    } catch (e) {
+      console.error(e);
       setError("Invalid Private Key. Unable to load wallet");
     }
   };
