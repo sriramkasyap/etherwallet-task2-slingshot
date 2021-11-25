@@ -10,7 +10,7 @@ import { ScreenContext } from "./App";
 const LoginScreen = () => {
   const { setPassword, setScreen, setError, error, setCurrentWalletAddress } =
     useContext(ScreenContext);
-  const [passwordKey, setPasswordKey] = useState();
+  const [passwordKey, setPasswordKey] = useState("");
   const [existingWallets, setExistingWallets] = useState([]);
   const [walletAddress, setWwalletAddress] = useState();
   const handleFormSubmit = async (e) => {

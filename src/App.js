@@ -22,6 +22,7 @@ function App() {
   const logout = (e) => {
     e.preventDefault();
     setPassword("");
+    setError("");
     setCurrentWalletAddress("");
     setScreen("onboard");
   };

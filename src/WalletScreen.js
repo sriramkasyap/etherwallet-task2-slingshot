@@ -1,9 +1,10 @@
-import { Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { formatEther } from "@ethersproject/units";
 import { AES, enc, lib } from "crypto-js";
 import { ethers, providers } from "ethers";
 import React, { useContext, useEffect, useState } from "react";
 import { ScreenContext } from "./App";
+import TransferETH from "./TransferETH";
 
 const WalletScreen = () => {
   const [wallet, setWallet] = useState();
@@ -34,7 +35,9 @@ const WalletScreen = () => {
 
   useEffect(() => {
     async function setwalletBalance() {
-      let provider = new providers.getDefaultProvider(4);
+      let provider = new providers.JsonRpcProvider(
+        "https://rinkeby.infura.io/v3/a610e824d6bc4bef94728de6b76a098f"
+      );
       let balance = await provider.getBalance(wallet.address);
       setBalance(balance);
     }
@@ -45,24 +48,34 @@ const WalletScreen = () => {
   }, [wallet]);
 
   return (
-    <Flex direction="column" alignItems="center" className="wallet-screen">
+    <Flex
+      direction="column"
+      alignItems="center"
+      className="wallet-screen"
+      maxW={600}
+      m="0 auto"
+    >
       <Heading size="md" m="20px 0 40px">
         Your Saved Wallet
       </Heading>
 
       {wallet ? (
         <>
-          <Text marginBottom="2">
-            <strong>Selected Network:</strong>4
-          </Text>
-          <Text marginBottom="2">
-            <strong>Your Wallet Address:</strong>
-            {wallet.address}
-          </Text>
-          <Text marginBottom="2">
-            <strong>Your wallet Balance:</strong>
-            {balance === null ? "Loading..." : formatEther(balance) + " ETH"}
-          </Text>
+          <Box>
+            <Text marginBottom="2">
+              <strong>Selected Network:</strong>4
+            </Text>
+            <Text marginBottom="2">
+              <strong>Your Wallet Address:</strong>
+              {wallet.address}
+            </Text>
+            <Text marginBottom="2">
+              <strong>Your wallet Balance:</strong>
+              {balance === null ? "Loading..." : formatEther(balance) + " ETH"}
+            </Text>
+          </Box>
+          <Divider m="20px 0" />
+          <TransferETH />
         </>
       ) : (
         <p>"Loading your wallet. Please wait..."</p>
