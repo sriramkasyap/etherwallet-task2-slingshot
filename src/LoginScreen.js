@@ -1,3 +1,7 @@
+import { Button } from "@chakra-ui/button";
+import { Input } from "@chakra-ui/input";
+import { Box, Flex, Heading, Stack } from "@chakra-ui/layout";
+import { Radio, RadioGroup } from "@chakra-ui/radio";
 import { AES, enc } from "crypto-js";
 import { ethers } from "ethers";
 import React, { useContext, useState } from "react";
@@ -40,44 +44,39 @@ const LoginScreen = () => {
   existingWallets = JSON.parse(existingWallets) || [];
 
   return (
-    <div className="login-screen">
-      <h2>Login to access your wallet</h2>
+    <Box maxW={600} m="10px auto" p="30px 0" className="login-screen">
+      <Heading size="md" m="20px auto 50px" style={{ textAlign: "center" }}>
+        Select your wallet Address
+      </Heading>
 
-      <p style={{ color: "red" }}>{error}</p>
+      <p style={{ color: "red", margin: "0 0 20px" }}>{error}</p>
 
       <form onSubmit={handleFormSubmit}>
-        <div className="input-holder">
-          {existingWallets.map((ew, i) => (
-            <div className="radio-holder" key={i}>
-              <input
-                type="radio"
-                name="walletAddress"
-                value={ew}
-                checked={walletAddress === ew}
-                title={ew}
-                onChange={(e) => setWwalletAddress(e.target.value)}
-              />
-              <label>{ew}</label>
-            </div>
-          ))}
-        </div>
-        <div className="input-holder">
-          <input
+        <RadioGroup onChange={setWwalletAddress} value={walletAddress}>
+          <Stack direction="column">
+            {existingWallets.map((ew, i) => (
+              <Radio name="walletAddress" value={ew} title={ew}>
+                {ew}
+              </Radio>
+            ))}
+          </Stack>
+        </RadioGroup>
+        <Flex m="20px 0 10px" className="input-holder">
+          <Input
             type="password"
             placeholder="Your Wallet Password"
-            className="form-control"
             name="passwordKey"
             value={passwordKey}
             required={true}
             onChange={(e) => setPasswordKey(e.target.value)}
           />
-        </div>
+        </Flex>
 
-        <button className="submit-button" type="submit">
+        <Button className="submit-button" type="submit">
           Login
-        </button>
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 };
 
