@@ -43,7 +43,9 @@ function App() {
         >
           <Flex justifyContent="flex-end" className="header">
             {screen !== "onboard" ? (
-              <Button onClick={logout}>Logout</Button>
+              <Button onClick={logout}>
+                {currentWalletAddress && password ? "Logout" : "Home"}
+              </Button>
             ) : (
               <></>
             )}

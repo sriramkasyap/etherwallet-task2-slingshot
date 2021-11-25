@@ -11,6 +11,7 @@ const LoginScreen = () => {
   const { setPassword, setScreen, setError, error, setCurrentWalletAddress } =
     useContext(ScreenContext);
   const [passwordKey, setPasswordKey] = useState();
+  const [existingWallets, setExistingWallets] = useState([]);
   const [walletAddress, setWwalletAddress] = useState();
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -39,9 +40,23 @@ const LoginScreen = () => {
     }
   };
 
-  let existingWallets = localStorage.getItem("ss_saved_wallets");
+  const refreshWallets = () => {
+    setExistingWallets(
+      JSON.parse(localStorage.getItem("ss_saved_wallets")) || []
+    );
+  };
 
-  existingWallets = JSON.parse(existingWallets) || [];
+  React.useEffect(refreshWallets, []);
+
+  const removeAccount = (ew) => {
+    localStorage.setItem(
+      "ss_saved_wallets",
+      JSON.stringify(existingWallets.filter((w) => w !== ew))
+    );
+
+    localStorage.removeItem(ew);
+    refreshWallets();
+  };
 
   return (
     <Box maxW={600} m="10px auto" p="30px 0" className="login-screen">
@@ -55,9 +70,19 @@ const LoginScreen = () => {
         <RadioGroup onChange={setWwalletAddress} value={walletAddress}>
           <Stack direction="column">
             {existingWallets.map((ew, i) => (
-              <Radio name="walletAddress" value={ew} title={ew}>
-                {ew}
-              </Radio>
+              <Flex key={i}>
+                <Radio
+                  marginRight="10"
+                  name="walletAddress"
+                  value={ew}
+                  title={ew}
+                >
+                  {ew}
+                </Radio>
+                <Button onClick={(e) => removeAccount(ew)} variant="link">
+                  Remove
+                </Button>
+              </Flex>
             ))}
           </Stack>
         </RadioGroup>

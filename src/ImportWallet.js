@@ -1,3 +1,6 @@
+import { Button } from "@chakra-ui/button";
+import { Input } from "@chakra-ui/input";
+import { Flex, Heading, Text } from "@chakra-ui/layout";
 import { ethers } from "ethers";
 import React, { useContext, useState } from "react";
 import { ScreenContext } from "./App";
@@ -6,9 +9,7 @@ var AES = require("crypto-js/aes");
 const ImportWallet = () => {
   const { setScreen, setPassword, setError, setCurrentWalletAddress, error } =
     useContext(ScreenContext);
-  const [pKey, setPkey] = useState(
-    "1fe001cdfeed0e55af243b20d1052c0fbdfea133c12bdeb7ad57c0d68bd99273"
-  );
+  const [pKey, setPkey] = useState();
   const [passwordKey, setPasswordKey] = useState();
 
   const handleFormSubmit = async (e) => {
@@ -40,14 +41,21 @@ const ImportWallet = () => {
     }
   };
   return (
-    <div className="import-screen">
-      <h2>Import existing Wallet</h2>
+    <Flex
+      maxW="600"
+      alignItems="center"
+      direction="column"
+      className="import-screen"
+    >
+      <Heading size="md" m="20px 0 30px">
+        Import existing Wallet
+      </Heading>
 
-      <p style={{ color: "red" }}>{error}</p>
+      <Text style={{ color: "red" }}>{error}</Text>
 
       <form onSubmit={handleFormSubmit}>
         <div className="input-holder">
-          <input
+          <Input
             type="text"
             className="form-control"
             name="privateKey"
@@ -58,25 +66,24 @@ const ImportWallet = () => {
           />
         </div>
         <div className="input-holder">
-          <input
+          <Input
             type="password"
-            placeholder="Create a PasswordKey"
-            className="form-control"
+            placeholder="Create a Password"
             name="passwordKey"
             value={passwordKey}
             required={true}
             onChange={(e) => setPasswordKey(e.target.value)}
           />
         </div>
-        <p className="helper-text">
+        <Text className="helper-text">
           This password will be used to encrypt your keys. Please save it in a
           safe place
-        </p>
-        <button className="submit-button" type="submit">
+        </Text>
+        <Button className="submit-button" type="submit">
           Import Wallet
-        </button>
+        </Button>
       </form>
-    </div>
+    </Flex>
   );
 };
 
