@@ -2,10 +2,10 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
-import { formatEther, parseEther } from "@ethersproject/units";
+import { commify, formatUnits, parseEther } from "@ethersproject/units";
 import { AES, enc, lib } from "crypto-js";
-import { ethers, BigNumber } from "ethers";
-import React, { useContext, useState } from "react";
+import { ethers } from "ethers";
+import React, { useContext, useEffect, useState } from "react";
 import { ScreenContext } from "./App";
 
 const TransferETH = () => {
@@ -15,6 +15,8 @@ const TransferETH = () => {
   const [progress, setProgress] = useState(false);
   const [address, setAddress] = useState("");
   const [transferAmount, setTransferAmt] = useState(0);
+  const [currentGasPrice, setCGP] = useState();
+  const [wallet, setWallet] = useState();
 
   const startPayment = async (e) => {
     e.preventDefault();
@@ -24,18 +26,6 @@ const TransferETH = () => {
     try {
       if (transferAmount === 0)
         throw new Error("Transfer amount cannot be zero");
-
-      let provider = new ethers.providers.JsonRpcProvider(
-        "https://rinkeby.infura.io/v3/a610e824d6bc4bef94728de6b76a098f"
-      );
-      let nosalt = lib.WordArray.random(0);
-
-      let pKeyEnc = localStorage.getItem(currentWalletAddress);
-      let pKey = AES.decrypt(pKeyEnc, password, {
-        salt: nosalt,
-      }).toString(enc.Utf8);
-
-      let wallet = new ethers.Wallet(pKey, provider);
 
       if (!wallet._isSigner)
         throw new Error("Authorization Failed. Please try Again");
@@ -65,11 +55,43 @@ const TransferETH = () => {
       setProgress(false);
     }
   };
+
+  useEffect(() => {
+    if (!wallet) {
+      let provider = new ethers.providers.JsonRpcProvider(
+        "https://rinkeby.infura.io/v3/a610e824d6bc4bef94728de6b76a098f"
+      );
+      let nosalt = lib.WordArray.random(0);
+
+      let pKeyEnc = localStorage.getItem(currentWalletAddress);
+      let pKey = AES.decrypt(pKeyEnc, password, {
+        salt: nosalt,
+      }).toString(enc.Utf8);
+
+      setWallet(new ethers.Wallet(pKey, provider));
+    } else {
+      async function setgasprice() {
+        let ggp = await wallet.getGasPrice();
+        setCGP(ggp);
+      }
+      setgasprice();
+    }
+  }, [currentWalletAddress, password, setWallet, wallet, setCGP]);
+
   return (
     <Flex direction="column" w="100%">
-      <Heading size="md" m="20px 0">
-        Transfer ETH
-      </Heading>
+      <Flex alignItems="center" direction="row" justifyContent="space-between">
+        <Heading size="md" m="20px 0">
+          Transfer ETH
+        </Heading>
+
+        <Text>
+          <strong>Current Gas Price: </strong>
+          {!currentGasPrice
+            ? "Loading..."
+            : commify(formatUnits(currentGasPrice, "gwei")) + " Gwei"}
+        </Text>
+      </Flex>
       <form onSubmit={startPayment}>
         <Stack spacing={8}>
           <FormControl>
