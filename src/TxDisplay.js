@@ -15,9 +15,7 @@ const TxDisplay = () => {
           </Heading>
           <Stack spacing={3} m="30px 0">
             {activeTxs.map((tx, t) => {
-              if (tx) {
-                return <TxRow key={t} tx={tx} status={"pending"} />;
-              }
+              return <TxRow key={t} tx={tx} status={"pending"} />;
             })}
           </Stack>
         </Box>
