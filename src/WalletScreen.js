@@ -48,39 +48,43 @@ const WalletScreen = () => {
   }, [wallet]);
 
   return (
-    <Flex
-      direction="column"
-      alignItems="center"
-      className="wallet-screen"
-      maxW={600}
-      m="0 auto"
-    >
-      <Heading size="md" m="20px 0 40px">
-        Your Saved Wallet
-      </Heading>
+    <>
+      <Flex
+        direction="column"
+        alignItems="center"
+        className="wallet-screen"
+        maxW={600}
+        m="0 auto"
+      >
+        <Heading size="md" m="20px 0 40px">
+          Your Saved Wallet
+        </Heading>
 
-      {wallet ? (
-        <>
-          <Box>
-            <Text marginBottom="2">
-              <strong>Selected Network:</strong>4
-            </Text>
-            <Text marginBottom="2">
-              <strong>Your Wallet Address:</strong>
-              {wallet.address}
-            </Text>
-            <Text marginBottom="2">
-              <strong>Your wallet Balance:</strong>
-              {balance === null ? "Loading..." : formatEther(balance) + " ETH"}
-            </Text>
-          </Box>
-          <Divider m="20px 0" />
-          <TransferETH />
-        </>
-      ) : (
-        <p>"Loading your wallet. Please wait..."</p>
-      )}
-    </Flex>
+        {wallet ? (
+          <>
+            <Box>
+              <Text marginBottom="2">
+                <strong>Selected Network:</strong>4
+              </Text>
+              <Text marginBottom="2">
+                <strong>Your Wallet Address:</strong>
+                {wallet.address}
+              </Text>
+              <Text marginBottom="2">
+                <strong>Your wallet Balance:</strong>
+                {balance === null
+                  ? "Loading..."
+                  : formatEther(balance) + " ETH"}
+              </Text>
+            </Box>
+            <Divider m="20px 0" />
+          </>
+        ) : (
+          <p>"Loading your wallet. Please wait..."</p>
+        )}
+      </Flex>
+      <TransferETH />
+    </>
   );
 };
 
