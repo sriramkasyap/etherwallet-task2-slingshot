@@ -68,7 +68,39 @@ const TransferETH = () => {
     });
   };
   const CancelTransaction = (tx) => {
-    console.log(tx);
+    let nosalt = lib.WordArray.random(0);
+
+    let pKeyEnc = localStorage.getItem(currentWalletAddress);
+
+    let pKey = AES.decrypt(pKeyEnc, password, {
+      salt: nosalt,
+    }).toString(enc.Utf8);
+
+    const common = new Common({
+      chain: Chain.Rinkeby,
+      hardfork: Hardfork.London,
+    });
+
+    const newTxGasPrice = tx.gasPrice.add(tx.gasPrice.div(5));
+
+    let txData = {
+      nonce: tx.nonce,
+      to: tx.to,
+      value: BigNumber.from(0)._hex,
+      gasPrice: newTxGasPrice._hex,
+      gasLimit: tx.gasLimit._hex,
+      data: tx.data,
+    };
+
+    let newtx = Transaction.fromTxData(txData, { common });
+    newtx = newtx.sign(Buffer.from(pKey, "hex"));
+
+    let newtxhex = newtx.serialize().toString("hex");
+
+    return provider.sendTransaction("0x" + newtxhex).then((ptx) => {
+      handlePostSendTransaction(ptx);
+      setProgress(false);
+    });
   };
 
   const startPayment = async (e) => {

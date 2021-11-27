@@ -58,8 +58,11 @@ const TxRow = ({ tx, status }) => {
   };
   const handleCancelTransaction = (e) => {
     e.preventDefault();
-
-    CancelTransaction(tx);
+    setProgress(true);
+    setTxUpdating(true);
+    CancelTransaction(tx).then((r) => {
+      setTxUpdating(false);
+    });
   };
 
   const openOnEtherscan = (e) => {
@@ -138,6 +141,9 @@ const TxRow = ({ tx, status }) => {
             <strong>Gas Fee: </strong>
             {formatUnits(tx.result.cumulativeGasUsed, "gwei")} Gwei
           </Text>
+          <Button disabled={txUpdating} size="sm" onClick={openOnEtherscan}>
+            View on Etherscan
+          </Button>
         </Stack>
       )}
     </Flex>
