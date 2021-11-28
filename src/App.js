@@ -5,7 +5,7 @@ import "./App.css";
 import CreateWallet from "./singleWallet/CreateWallet";
 import ImportWallet from "./singleWallet/ImportWallet";
 import LoginScreen from "./singleWallet/LoginScreen";
-import Onboarding from "./singleWallet/Onboarding";
+import Onboarding from "./Onboarding";
 import WalletScreen from "./singleWallet/WalletScreen";
 const ScreenContext = createContext();
 
