@@ -1,10 +1,12 @@
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
-import { Box, Code, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Textarea } from "@chakra-ui/react";
 
-const GenerateSeed = ({
+const ImportSeed = ({
   mnemonic,
-  handleFormSubmit,
+  setMnemonic,
+  handleImportSeedPhrase,
   passwordKey,
   setPasswordKey,
   errorMessage,
@@ -15,14 +17,14 @@ const GenerateSeed = ({
       <Heading size="sm" m="10px 0">
         Your Seed Phrase
       </Heading>
-      <Code mb="5px" p="10px 20px" border="1px solid #ccc" borderRadius={5}>
-        {mnemonic}
-      </Code>
-      <Text className="helper-text" fontSize="14">
-        This Seed phrase can be used to generate your wallets in future. Please
-        save it in a safe place
-      </Text>
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleImportSeedPhrase}>
+        <Box className="input-holder">
+          <Textarea
+            placeholder="Seed Phrase word list"
+            value={mnemonic}
+            onChange={(e) => setMnemonic(e.target.value)}
+          />
+        </Box>
         <Box className="input-holder">
           <Input
             type="password"
@@ -34,7 +36,7 @@ const GenerateSeed = ({
           />
         </Box>
         <Text className="helper-text" fontSize="14">
-          This Passphrase will be used to generate and encrypt your seed phrase.
+          This Passphrase will be used to encrypt and save your seed phrase.
           Please save it in a safe place
         </Text>
         <Button
@@ -43,7 +45,7 @@ const GenerateSeed = ({
           type="submit"
           colorScheme="teal"
         >
-          Save
+          Import
         </Button>
         <Text color="red">{errorMessage}</Text>
       </form>
@@ -51,4 +53,4 @@ const GenerateSeed = ({
   );
 };
 
-export default GenerateSeed;
+export default ImportSeed;

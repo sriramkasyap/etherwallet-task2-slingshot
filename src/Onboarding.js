@@ -28,7 +28,9 @@ const Onboarding = () => {
         <Button onClick={() => setScreen("create-hd")}>
           Create New Seed Phrase
         </Button>
-        <Button onClick={() => setScreen("import")}>Import Wallet</Button>
+        <Button onClick={() => setScreen("import-hd")}>
+          Import wallets from Seed Phrase
+        </Button>
       </Stack>
       <Flex flex="100%" mt="10" justifyContent="center">
         <Button onClick={() => setScreen("login")}>

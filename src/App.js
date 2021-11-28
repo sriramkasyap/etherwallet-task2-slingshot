@@ -58,9 +58,11 @@ function App() {
           {screen === "create" ? (
             <CreateWallet />
           ) : screen === "create-hd" ? (
-            <CreateHDWallet />
+            <CreateHDWallet isCreateView={true} />
           ) : screen === "import" ? (
             <ImportWallet />
+          ) : screen === "import-hd" ? (
+            <CreateHDWallet isCreateView={false} />
           ) : screen === "wallet" ? (
             <WalletScreen />
           ) : screen === "login" ? (

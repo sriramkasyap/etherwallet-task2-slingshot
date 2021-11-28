@@ -6,13 +6,16 @@ import { hdkey } from "ethereumjs-wallet";
 import { encrypt } from "crypto-js/aes";
 import GenerateSeed from "./GenerateSeed";
 import GeneratedWallet from "./GeneratedWallet";
+import { providers } from "ethers";
+import ImportSeed from "./ImportSeed";
 
-const CreateHDWallet = () => {
+const CreateHDWallet = ({ isCreateView }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [passwordKey, setPasswordKey] = useState("");
   const [mnemonic, setMnemonic] = useState("");
   const [seed, setseed] = useState();
   const [wallets, setWallets] = useState([]);
+  const [inProgress, setProgress] = useState(false);
 
   const addWallet = (wallet) => {
     setWallets([
@@ -33,6 +36,7 @@ const CreateHDWallet = () => {
       setErrorMessage("Please enter a passphrase");
       return;
     }
+    setProgress(true);
     let encrypted = encrypt(mnemonic, passwordKey).toString();
     localStorage.setItem("hd_xpriv_encrypted", encrypted);
 
@@ -42,16 +46,50 @@ const CreateHDWallet = () => {
     generateNewWallet(0, xPriv);
   };
 
-  const generateNewWallet = (index = 0, xPrivKey = seed) => {
+  const handleImportSeedPhrase = async (e) => {
+    e.preventDefault();
+
+    if (!(passwordKey && passwordKey.length > 0)) {
+      setErrorMessage("Please enter a passphrase");
+      return;
+    }
+
+    if (!(mnemonic && mnemonic.trim().split(/\s+/g).length === 12)) {
+      setErrorMessage("Please enter a valid seed phrase");
+      return;
+    }
+
+    setProgress(true);
+    let encrypted = encrypt(mnemonic, passwordKey).toString();
+    localStorage.setItem("hd_xpriv_encrypted", encrypted);
+    console.log(mnemonic);
+
+    let xPriv = await mnemonicToSeed(mnemonic);
+    await setseed(xPriv);
+
+    generateNewWallet(0, xPriv);
+  };
+
+  const generateNewWallet = async (index = 0, xPrivKey = seed) => {
     const hdwallet = hdkey.fromMasterSeed(xPrivKey);
-    const path = "m/44'/60'/0'/0/0";
+    const path = "m/44'/60'/0'/0";
     const wallet = hdwallet.derivePath(path).deriveChild(index).getWallet();
 
+    let provider = new providers.JsonRpcProvider(
+      "https://rinkeby.infura.io/v3/a610e824d6bc4bef94728de6b76a098f"
+    );
+
+    let address = wallet.getAddressString();
+    let balance = await provider.getBalance(address);
+
     addWallet({
-      address: wallet.getAddressString(),
+      address,
       publicKey: wallet.getPublicKeyString(),
       privateKey: wallet.getPrivateKeyString(),
+      balance,
     });
+    localStorage.setItem("hd_wallet_count", index + 1);
+    setProgress(false);
   };
 
   return (
@@ -66,32 +104,60 @@ const CreateHDWallet = () => {
         HD Wallet
       </Heading>
 
-      {mnemonic && mnemonic.length > 0 ? (
-        wallets && wallets.length > 0 ? (
-          <>
-            <GeneratedWallet
-              wallets={wallets}
-              generateNewWallet={generateNewWallet}
-            />
-          </>
-        ) : (
-          <GenerateSeed
-            mnemonic={mnemonic}
-            handleFormSubmit={handleFormSubmit}
-            passwordKey={passwordKey}
-            setPasswordKey={setPasswordKey}
-            errorMessage={errorMessage}
-          />
-        )
-      ) : (
+      {isCreateView ? (
         <>
-          <Flex>
-            <Button colorScheme="teal" onClick={createMnemonic}>
-              Generate Seed phrase
-            </Button>
-          </Flex>
+          {mnemonic && mnemonic.length > 0 ? (
+            wallets && wallets.length > 0 ? (
+              <>
+                <GeneratedWallet
+                  wallets={wallets}
+                  generateNewWallet={generateNewWallet}
+                  setProgress={setProgress}
+                  inProgress={inProgress}
+                />
+              </>
+            ) : (
+              <GenerateSeed
+                mnemonic={mnemonic}
+                handleFormSubmit={handleFormSubmit}
+                passwordKey={passwordKey}
+                setPasswordKey={setPasswordKey}
+                errorMessage={errorMessage}
+                inProgress={inProgress}
+              />
+            )
+          ) : (
+            <>
+              <Flex>
+                <Button colorScheme="teal" onClick={createMnemonic}>
+                  Generate Seed phrase
+                </Button>
+              </Flex>
+            </>
+          )}
         </>
+      ) : wallets && wallets.length > 0 ? (
+        <>
+          <GeneratedWallet
+            wallets={wallets}
+            generateNewWallet={generateNewWallet}
+            setProgress={setProgress}
+            inProgress={inProgress}
+          />
+        </>
+      ) : (
+        <ImportSeed
+          setMnemonic={setMnemonic}
+          mnemonic={mnemonic}
+          handleImportSeedPhrase={handleImportSeedPhrase}
+          passwordKey={passwordKey}
+          setPasswordKey={setPasswordKey}
+          errorMessage={errorMessage}
+          inProgress={inProgress}
+        />
       )}
+
+      {}
     </Flex>
   );
 };
