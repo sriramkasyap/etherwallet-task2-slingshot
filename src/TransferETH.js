@@ -1,9 +1,10 @@
-import { Button } from "@chakra-ui/button";
+import { Button, ButtonGroup } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Divider, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
 import {
   commify,
+  formatEther,
   formatUnits,
   parseEther,
   parseUnits,
@@ -18,7 +19,7 @@ import TxDisplay from "./TxDisplay";
 
 const TransferContext = React.createContext();
 
-const TransferETH = () => {
+const TransferETH = ({ setBalance }) => {
   const [successMsg, setSuccess] = useState();
   const { setError, error, currentWalletAddress, password } =
     useContext(ScreenContext);
@@ -155,13 +156,13 @@ const TransferETH = () => {
       provider.sendTransaction("0x" + txhex).then((ptx) => {
         handlePostSendTransaction(ptx);
         setProgress(false);
+        setAddress("");
+        setTransferAmt(0);
       });
 
       // setSuccess(
       //   `Transfer Completed successfully. Transaction hash: ${ptx.transactionHash}`
       // );
-      // setAddress("");
-      // setTransferAmt(0);
     } catch (error) {
       console.error(error);
       setError(error.message);
@@ -179,7 +180,7 @@ const TransferETH = () => {
     });
   };
 
-  const handleCompleteTransaction = (tx, result) => {
+  const handleCompleteTransaction = async (tx, result) => {
     setCompletedTxns([
       ...completedTxns,
       {
@@ -192,6 +193,7 @@ const TransferETH = () => {
       return at.nonce !== tx.nonce;
     });
     setActiveTxs(newtxs);
+    setBalance(await provider.getBalance(currentWalletAddress));
   };
 
   useEffect(() => {
@@ -210,6 +212,28 @@ const TransferETH = () => {
       setgasprice();
     }
   }, [setCGP, setProvider, provider]);
+
+  const handleSendMaxEther = async (e) => {
+    e.preventDefault();
+
+    setProgress(true);
+
+    setCGP(await provider.getGasPrice());
+    let curBalance = await provider.getBalance(currentWalletAddress);
+
+    if (curBalance.lte(0)) {
+      setError("You do not have any ETH to transfer");
+      setProgress(false);
+      return;
+    }
+
+    let gasFee = parseUnits(customGasPrice, "gwei").mul(gasLimit);
+
+    let transferrable = curBalance.sub(gasFee);
+
+    setTransferAmt(formatEther(transferrable));
+    setProgress(false);
+  };
 
   return (
     <TransferContext.Provider
@@ -254,6 +278,7 @@ const TransferETH = () => {
                   Recipient Wallet Address
                 </FormLabel>
                 <Input
+                  required
                   placeholder="Starts with 0x...."
                   type="text"
                   name="recipient"
@@ -267,6 +292,7 @@ const TransferETH = () => {
                   Custom Gas Price (Gwei)
                 </FormLabel>
                 <Input
+                  required
                   placeholder=""
                   type="number"
                   name="customGasPrice"
@@ -280,6 +306,7 @@ const TransferETH = () => {
               <FormControl mr={2}>
                 <FormLabel htmlFor="gasLimit">Gas Limit</FormLabel>
                 <Input
+                  required
                   placeholder="Max gas to spend for a transaction"
                   type="number"
                   name="gasLimit"
@@ -291,6 +318,7 @@ const TransferETH = () => {
               <FormControl ml={2}>
                 <FormLabel htmlFor="ethValue">ETH Value to transfer</FormLabel>
                 <Input
+                  required
                   placeholder="Transfer Amount"
                   type="number"
                   name="ethValue"
@@ -300,9 +328,24 @@ const TransferETH = () => {
                 />
               </FormControl>
             </Flex>
-            <Button disabled={progress} type="submit">
-              {progress ? "Processing...." : "Transfer"}
-            </Button>
+            <Flex justifyContent="flex-end">
+              <ButtonGroup>
+                <Button
+                  disabled={progress || !currentGasPrice}
+                  type="button"
+                  onClick={handleSendMaxEther}
+                >
+                  {progress ? "Calculating...." : "Set Max Ether"}
+                </Button>
+                <Button
+                  disabled={progress || !currentGasPrice}
+                  type="submit"
+                  colorScheme="green"
+                >
+                  {progress ? "Processing...." : "Transfer"}
+                </Button>
+              </ButtonGroup>
+            </Flex>
           </Stack>
           <Box m="20px 0">
             <Text color="green">{successMsg}</Text>

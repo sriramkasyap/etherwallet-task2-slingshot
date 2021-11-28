@@ -83,7 +83,7 @@ const WalletScreen = () => {
           <p>"Loading your wallet. Please wait..."</p>
         )}
       </Flex>
-      <TransferETH />
+      <TransferETH setBalance={setBalance} />
     </>
   );
 };
