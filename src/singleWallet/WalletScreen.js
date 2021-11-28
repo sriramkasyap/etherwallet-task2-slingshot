@@ -3,7 +3,7 @@ import { formatEther } from "@ethersproject/units";
 import { AES, enc, lib } from "crypto-js";
 import { ethers, providers } from "ethers";
 import React, { useContext, useEffect, useState } from "react";
-import { ScreenContext } from "./App";
+import { ScreenContext } from "../App";
 import TransferETH from "./TransferETH";
 
 const WalletScreen = () => {

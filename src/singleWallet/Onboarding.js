@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { Divider, Flex, Stack } from "@chakra-ui/layout";
 import React, { useContext } from "react";
-import { ScreenContext } from "./App";
+import { ScreenContext } from "../App";
 
 const Onboarding = () => {
   const { setScreen } = useContext(ScreenContext);

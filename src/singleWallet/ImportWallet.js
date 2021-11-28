@@ -3,7 +3,7 @@ import { Input } from "@chakra-ui/input";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
 import { ethers } from "ethers";
 import React, { useContext, useState } from "react";
-import { ScreenContext } from "./App";
+import { ScreenContext } from "../App";
 var AES = require("crypto-js/aes");
 
 const ImportWallet = () => {

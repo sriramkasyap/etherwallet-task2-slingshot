@@ -5,7 +5,7 @@ import { Radio, RadioGroup } from "@chakra-ui/radio";
 import { AES, enc } from "crypto-js";
 import { ethers } from "ethers";
 import React, { useContext, useState } from "react";
-import { ScreenContext } from "./App";
+import { ScreenContext } from "../App";
 
 const LoginScreen = () => {
   const { setPassword, setScreen, setError, error, setCurrentWalletAddress } =

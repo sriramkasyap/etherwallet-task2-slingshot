@@ -2,11 +2,11 @@ import { ChakraProvider, Button, Flex, Heading } from "@chakra-ui/react";
 import { createContext } from "react";
 import { useState } from "react";
 import "./App.css";
-import CreateWallet from "./CreateWallet";
-import ImportWallet from "./ImportWallet";
-import LoginScreen from "./LoginScreen";
-import Onboarding from "./Onboarding";
-import WalletScreen from "./WalletScreen";
+import CreateWallet from "./singleWallet/CreateWallet";
+import ImportWallet from "./singleWallet/ImportWallet";
+import LoginScreen from "./singleWallet/LoginScreen";
+import Onboarding from "./singleWallet/Onboarding";
+import WalletScreen from "./singleWallet/WalletScreen";
 const ScreenContext = createContext();
 
 function App() {

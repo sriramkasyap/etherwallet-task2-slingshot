@@ -12,9 +12,9 @@ import {
 import { AES, enc, lib } from "crypto-js";
 import { ethers, BigNumber } from "ethers";
 import React, { useContext, useEffect, useState } from "react";
-import { ScreenContext } from "./App";
 import Common, { Chain, Hardfork } from "@ethereumjs/common";
 import { Transaction } from "@ethereumjs/tx";
+import { ScreenContext } from "../App";
 import TxDisplay from "./TxDisplay";
 
 const TransferContext = React.createContext();

@@ -4,7 +4,7 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import { Wallet } from "@ethersproject/wallet";
 import { AES } from "crypto-js";
 import React, { useContext, useState } from "react";
-import { ScreenContext } from "./App";
+import { ScreenContext } from "../App";
 
 const CreateWallet = () => {
   const { setPassword, setScreen, setCurrentWalletAddress } =
