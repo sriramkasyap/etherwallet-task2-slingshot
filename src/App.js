@@ -7,6 +7,7 @@ import ImportWallet from "./singleWallet/ImportWallet";
 import LoginScreen from "./singleWallet/LoginScreen";
 import Onboarding from "./Onboarding";
 import WalletScreen from "./singleWallet/WalletScreen";
+import CreateHDWallet from "./hdwallet/CreateHDWallet";
 const ScreenContext = createContext();
 
 function App() {
@@ -51,11 +52,13 @@ function App() {
               <></>
             )}
           </Flex>
-          <Heading className="main-heading" style={{ textAlign: "center" }}>
+          <Heading className="main-heading" textAlign="center">
             My Wallet App
           </Heading>
           {screen === "create" ? (
             <CreateWallet />
+          ) : screen === "create-hd" ? (
+            <CreateHDWallet />
           ) : screen === "import" ? (
             <ImportWallet />
           ) : screen === "wallet" ? (
