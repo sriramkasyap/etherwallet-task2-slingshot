@@ -1,19 +1,32 @@
 import { Button } from "@chakra-ui/button";
 import { Divider, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
 import { formatEther } from "@ethersproject/units";
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
+import { ScreenContext } from "../App";
 
 const GeneratedWallet = ({
   setProgress,
   wallets,
   generateNewWallet,
   inProgress,
+  passwordKey,
 }) => {
+  const { setPassword, setCurrentWalletAddress, setScreen } =
+    useContext(ScreenContext);
+
   const handleGenerateWallet = (e) => {
     e.preventDefault();
     setProgress(true);
     generateNewWallet(wallets.length);
   };
+
+  const handleTransferFromWallet = async (e) => {
+    e.preventDefault();
+    await setPassword(passwordKey);
+    await setCurrentWalletAddress(wallets[e.target.dataset.walletid].address);
+    setScreen("wallet");
+  };
+
   return (
     <Stack w="100%">
       <Flex justifyContent="space-between" alignItems="center">
@@ -40,7 +53,13 @@ const GeneratedWallet = ({
               </Stack>
 
               <Stack>
-                <Button colorScheme="teal">Transfer ETH</Button>
+                <Button
+                  onClick={handleTransferFromWallet}
+                  data-walletid={w}
+                  colorScheme="teal"
+                >
+                  Transfer ETH
+                </Button>
               </Stack>
             </Flex>
             <Divider />

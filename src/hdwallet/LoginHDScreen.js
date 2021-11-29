@@ -11,8 +11,7 @@ import { ScreenContext } from "../App";
 import GeneratedWallet from "./GeneratedWallet";
 
 const LoginHDScreen = () => {
-  const { setPassword, setScreen, setError, error, setCurrentWalletAddress } =
-    useContext(ScreenContext);
+  const { setError, error } = useContext(ScreenContext);
   const [passwordKey, setPasswordKey] = useState("");
 
   const [seed, setseed] = useState();
@@ -78,7 +77,10 @@ const LoginHDScreen = () => {
       balance,
     };
 
-    let privateKeyEnc = encrypt(privateKey, passwordKey).toString();
+    let privateKeyEnc = encrypt(
+      privateKey.substring(2),
+      passwordKey
+    ).toString();
     localStorage.setItem(address, privateKeyEnc);
 
     return wallett;
@@ -87,7 +89,7 @@ const LoginHDScreen = () => {
   return (
     <Box maxW={600} m="10px auto" p="30px 0" className="login-screen">
       <Heading size="md" m="20px auto 50px" style={{ textAlign: "center" }}>
-        Select your wallet Address
+        HD Wallet
       </Heading>
 
       <p style={{ color: "red", margin: "0 0 20px" }}>{error}</p>
@@ -99,6 +101,7 @@ const LoginHDScreen = () => {
             generateNewWallet={generateNewWallet}
             setProgress={setProgress}
             inProgress={inProgress}
+            passwordKey={passwordKey}
           />
         </>
       ) : (
@@ -115,7 +118,7 @@ const LoginHDScreen = () => {
           </Flex>
 
           <Button disabled={inProgress} className="submit-button" type="submit">
-            {inProgress ? "Processing" : "Login"}
+            {inProgress ? "Logging in..." : "Login"}
           </Button>
         </form>
       )}

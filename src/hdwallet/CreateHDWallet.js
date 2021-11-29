@@ -89,7 +89,10 @@ const CreateHDWallet = ({ isCreateView }) => {
       balance,
     });
     localStorage.setItem("hd_wallet_count", index + 1);
-    let privateKeyEnc = encrypt(privateKey, passwordKey).toString();
+    let privateKeyEnc = encrypt(
+      privateKey.substring(2),
+      passwordKey
+    ).toString();
     localStorage.setItem(address, privateKeyEnc);
 
     setProgress(false);
@@ -146,6 +149,7 @@ const CreateHDWallet = ({ isCreateView }) => {
             generateNewWallet={generateNewWallet}
             setProgress={setProgress}
             inProgress={inProgress}
+            passwordKey={passwordKey}
           />
         </>
       ) : (
