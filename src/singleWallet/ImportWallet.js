@@ -51,6 +51,7 @@ const ImportWallet = () => {
       alignItems="center"
       direction="column"
       className="import-screen"
+      m="0 auto"
     >
       <Heading size="md" m="20px 0 30px">
         Import existing Wallet
