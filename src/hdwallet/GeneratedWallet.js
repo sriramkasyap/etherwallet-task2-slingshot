@@ -27,15 +27,21 @@ const GeneratedWallet = ({
       <Stack paddingTop={5} marginTop="40px">
         {wallets.map((wallet, w) => (
           <Fragment key={w}>
-            <Flex p="20px 0" direction="column">
-              <Text>
-                <strong>Wallet Address: </strong>
-                {wallet.address}
-              </Text>
-              <Text>
-                <strong>Balance: </strong>
-                {formatEther(wallet.balance)} ETH
-              </Text>
+            <Flex p="20px 0" direction="row">
+              <Stack>
+                <Text>
+                  <strong>Wallet Address: </strong>
+                  {wallet.address}
+                </Text>
+                <Text>
+                  <strong>Balance: </strong>
+                  {formatEther(wallet.balance)} ETH
+                </Text>
+              </Stack>
+
+              <Stack>
+                <Button colorScheme="teal">Transfer ETH</Button>
+              </Stack>
             </Flex>
             <Divider />
           </Fragment>

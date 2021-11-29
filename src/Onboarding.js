@@ -19,6 +19,9 @@ const Onboarding = () => {
         </Heading>
         <Button onClick={() => setScreen("create")}>Create New Wallet</Button>
         <Button onClick={() => setScreen("import")}>Import Wallet</Button>
+        <Button onClick={() => setScreen("login")}>
+          Login to saved wallet
+        </Button>
       </Stack>
       <Divider orientation="vertical" />
       <Stack spacing={5} m="20px 40px" direction="column">
@@ -31,12 +34,11 @@ const Onboarding = () => {
         <Button onClick={() => setScreen("import-hd")}>
           Import wallets from Seed Phrase
         </Button>
-      </Stack>
-      <Flex flex="100%" mt="10" justifyContent="center">
-        <Button onClick={() => setScreen("login")}>
-          Login to saved wallet
+        <Button onClick={() => setScreen("login-hd")}>
+          Login to saved HD wallet
         </Button>
-      </Flex>
+      </Stack>
+      <Flex flex="100%" mt="10" justifyContent="center"></Flex>
     </Flex>
   );
 };

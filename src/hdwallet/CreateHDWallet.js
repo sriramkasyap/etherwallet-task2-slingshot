@@ -62,7 +62,6 @@ const CreateHDWallet = ({ isCreateView }) => {
     setProgress(true);
     let encrypted = encrypt(mnemonic, passwordKey).toString();
     localStorage.setItem("hd_xpriv_encrypted", encrypted);
-    console.log(mnemonic);
 
     let xPriv = await mnemonicToSeed(mnemonic);
     await setseed(xPriv);
@@ -81,14 +80,18 @@ const CreateHDWallet = ({ isCreateView }) => {
 
     let address = wallet.getAddressString();
     let balance = await provider.getBalance(address);
+    let privateKey = wallet.getPrivateKeyString();
 
     addWallet({
       address,
       publicKey: wallet.getPublicKeyString(),
-      privateKey: wallet.getPrivateKeyString(),
+      privateKey,
       balance,
     });
     localStorage.setItem("hd_wallet_count", index + 1);
+    let privateKeyEnc = encrypt(privateKey, passwordKey).toString();
+    localStorage.setItem(address, privateKeyEnc);
+
     setProgress(false);
   };
 

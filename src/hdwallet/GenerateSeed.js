@@ -43,7 +43,7 @@ const GenerateSeed = ({
           type="submit"
           colorScheme="teal"
         >
-          Save
+          {inProgress ? "Creating your HD Wallet...." : "Save"}
         </Button>
         <Text color="red">{errorMessage}</Text>
       </form>

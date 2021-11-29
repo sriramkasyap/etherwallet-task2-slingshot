@@ -8,6 +8,7 @@ import LoginScreen from "./singleWallet/LoginScreen";
 import Onboarding from "./Onboarding";
 import WalletScreen from "./singleWallet/WalletScreen";
 import CreateHDWallet from "./hdwallet/CreateHDWallet";
+import LoginHDScreen from "./hdwallet/LoginHDScreen";
 const ScreenContext = createContext();
 
 function App() {
@@ -65,6 +66,8 @@ function App() {
             <CreateHDWallet isCreateView={false} />
           ) : screen === "wallet" ? (
             <WalletScreen />
+          ) : screen === "login-hd" ? (
+            <LoginHDScreen />
           ) : screen === "login" ? (
             <LoginScreen />
           ) : (
