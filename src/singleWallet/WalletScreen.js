@@ -148,6 +148,7 @@ const WalletScreen = () => {
       getERC20Balances();
       getERC721Balances();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet]);
 
   const refreshERC20Balances = async () => {
