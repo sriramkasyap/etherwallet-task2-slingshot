@@ -151,6 +151,7 @@ const WalletScreen = () => {
   }, [wallet]);
 
   const refreshERC20Balances = async () => {
+    setImporting(true);
     let tokens = JSON.parse(localStorage.getItem("SupportedTokens") || "[]");
     let tokensWithBalance = [];
     let provider = new providers.JsonRpcProvider(
@@ -181,6 +182,7 @@ const WalletScreen = () => {
   };
 
   const refreshERC721Balances = async () => {
+    setImporting(true);
     let tokens = JSON.parse(localStorage.getItem("SupportedNFTs") || "[]");
     let tokensWithBalance = [];
     let provider = new providers.JsonRpcProvider(
@@ -322,9 +324,18 @@ const WalletScreen = () => {
             <Divider m="20px 0" />
             <Flex mt={5} width={"100%"} pb={5}>
               <Box pb={7} flex={3} pr={7} borderRight={"1px solid #eee"}>
-                <Heading size={"sm"} mb={5}>
-                  Wallet Balances
-                </Heading>
+                <Flex mb={5} justifyContent={"space-between"}>
+                  <Heading size={"sm"} mb={5}>
+                    Wallet Balances
+                  </Heading>
+                  <Button
+                    disabled={importing}
+                    onClick={(e) => refreshERC20Balances()}
+                    size={"xs"}
+                  >
+                    Refresh
+                  </Button>
+                </Flex>
 
                 <Table variant="simple" size={"sm"}>
                   <Thead>
@@ -390,9 +401,18 @@ const WalletScreen = () => {
             <Divider m="20px 0" />
             <Flex mt={5} width={"100%"} pb={5}>
               <Box flex={3} borderRight={"1px solid #eee"} pb={7} pr={7}>
-                <Heading mb={5} size={"md"}>
-                  NFTs Owned
-                </Heading>
+                <Flex justifyContent={"space-between"}>
+                  <Heading mb={5} size={"md"}>
+                    NFTs Owned
+                  </Heading>
+                  <Button
+                    disabled={importing}
+                    onClick={(e) => refreshERC721Balances()}
+                    size={"xs"}
+                  >
+                    Refresh
+                  </Button>
+                </Flex>
                 <Stack>
                   {!importing && supportedNFTs.length === 0 ? (
                     <Text>No NFTs Found</Text>
@@ -416,7 +436,7 @@ const WalletScreen = () => {
                           </Heading>
                           <Box ml={5} justifySelf={"flex-start"}>
                             {nft.nftokens.map((n) => (
-                              <Tag>{n}</Tag>
+                              <Tag mr={2}>{n}</Tag>
                             ))}
                           </Box>
                           <Link
