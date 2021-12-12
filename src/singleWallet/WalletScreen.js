@@ -354,23 +354,21 @@ const WalletScreen = () => {
                         {balance !== null ? formatEther(balance) : "---"} ETH
                       </Td>
                     </Tr>
-                    {supportedTokens.length > 0
-                      ? supportedTokens.map((token, t) => {
-                          return (
-                            <Tr key={t}>
-                              <Td>{token.symbol}</Td>
-                              <Td>{token.name}</Td>
-                              <Td whiteSpace={"nowrap"} isNumeric>
-                                {token.balance !== null &&
-                                token.balance !== undefined
-                                  ? formatEther(token.balance)
-                                  : "---"}{" "}
-                                {token.symbol}
-                              </Td>
-                            </Tr>
-                          );
-                        })
-                      : "Loading..."}
+                    {supportedTokens.map((token, t) => {
+                      return (
+                        <Tr key={t}>
+                          <Td>{token.symbol}</Td>
+                          <Td>{token.name}</Td>
+                          <Td whiteSpace={"nowrap"} isNumeric>
+                            {token.balance !== null &&
+                            token.balance !== undefined
+                              ? formatEther(token.balance)
+                              : "---"}{" "}
+                            {token.symbol}
+                          </Td>
+                        </Tr>
+                      );
+                    })}
                   </Tbody>
                 </Table>
               </Box>
