@@ -106,12 +106,12 @@ const TransactionDetail = ({ tx, supportedTokens, wallet }) => {
     <Flex borderBottom="1px solid #1a202c22" p="20px 15px" direction="row">
       <Stack flex="3">
         <Heading colorScheme={"teal"} size={"sm"}>
-          {dst === wallet.address ? "Minted" : "Token Tansfer"} - {tokenName}
+          {src === "0x0000000000000000000000000000000000000000"
+            ? "Minted"
+            : "Token Tansfer"}{" "}
+          - {tokenName}
         </Heading>
-        <Text fontSize={14}>
-          <strong>Transaction Hash: </strong>
-          {tx.transactionHash}
-        </Text>
+
         {val.gt(0) ? (
           <Text fontSize={14}>
             <strong>Value: </strong>
@@ -120,14 +120,23 @@ const TransactionDetail = ({ tx, supportedTokens, wallet }) => {
         ) : (
           <></>
         )}
-        {dst ? (
+        {src === "0x0000000000000000000000000000000000000000" ? (
+          <></>
+        ) : dst === wallet.address ? (
+          <Text fontSize={14}>
+            <strong>Received from: </strong>
+            {src}
+          </Text>
+        ) : (
           <Text fontSize={14}>
             <strong>Sent to: </strong>
             {dst}
           </Text>
-        ) : (
-          <></>
         )}
+        <Text fontSize={14}>
+          <strong>Transaction Hash: </strong>
+          {tx.transactionHash}
+        </Text>
       </Stack>
       <Stack flex="1" spacing={3} pl={10}>
         {/* <Text fontSize={14}>
