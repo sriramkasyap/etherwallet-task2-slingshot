@@ -21,6 +21,7 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { ScreenContext } from "../App";
 import TransferETH from "./TransferETH";
 import ERC721_ABI from "../ERC721_ABI";
+import WalletTransactions from "./WalletTransactions";
 
 const ERC20_ABI = [
   // Read-Only Functions
@@ -304,7 +305,7 @@ const WalletScreen = () => {
         direction="column"
         alignItems="center"
         className="wallet-screen"
-        maxW={800}
+        maxW={1040}
         m="0 auto"
       >
         <Heading size="md" m="20px 0 40px">
@@ -492,6 +493,11 @@ const WalletScreen = () => {
         )}
       </Flex>
       <TransferETH setBalance={setBalance} />
+      {wallet && wallet.address ? (
+        <WalletTransactions supportedTokens={supportedTokens} wallet={wallet} />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
