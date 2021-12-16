@@ -435,8 +435,10 @@ const WalletScreen = () => {
                             List of {nft.symbol}s you own:
                           </Heading>
                           <Box ml={5} justifySelf={"flex-start"}>
-                            {nft.nftokens.map((n) => (
-                              <Tag mr={2}>{n}</Tag>
+                            {nft.nftokens.map((n, a) => (
+                              <Tag mr={2} key={a}>
+                                {n}
+                              </Tag>
                             ))}
                           </Box>
                           <Link
@@ -494,7 +496,11 @@ const WalletScreen = () => {
       </Flex>
       <TransferETH setBalance={setBalance} />
       {wallet && wallet.address ? (
-        <WalletTransactions supportedTokens={supportedTokens} wallet={wallet} />
+        <WalletTransactions
+          supportedNFTs={supportedNFTs}
+          supportedTokens={supportedTokens}
+          wallet={wallet}
+        />
       ) : (
         <></>
       )}
